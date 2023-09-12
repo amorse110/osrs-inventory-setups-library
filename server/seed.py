@@ -30,7 +30,7 @@ def scrape_ammo():
                 src = "No image src"
 
             # Create and add the Item to the database
-            new_item = Item(name=name, slot=ammo, image=src)
+            new_item = Item(name=name, slot="ammo", image=src)
             db.session.add(new_item)
 
         db.session.commit()
@@ -56,7 +56,7 @@ def scrape_body():
                 src = "No image src"
 
             # Create and add the Item to the database
-            new_item = Item(name=name, slot=body, image=src)
+            new_item = Item(name=name, slot="body", image=src)
             db.session.add(new_item)
 
         db.session.commit()
@@ -82,7 +82,7 @@ def scrape_cape():
                 src = "No image src"
 
             # Create and add the Item to the database
-            new_item = Item(name=name, slot=cape, image=src)
+            new_item = Item(name=name, slot="cape", image=src)
             db.session.add(new_item)
 
         db.session.commit()
@@ -108,7 +108,7 @@ def scrape_feet():
                 src = "No image src"
 
             # Create and add the Item to the database
-            new_item = Item(name=name, slot=feet, image=src)
+            new_item = Item(name=name, slot="feet", image=src)
             db.session.add(new_item)
 
         db.session.commit()
@@ -134,7 +134,7 @@ def scrape_hands():
                 src = "No image src"
 
             # Create and add the Item to the database
-            new_item = Item(name=name, slot=hands, image=src)
+            new_item = Item(name=name, slot="hands", image=src)
             db.session.add(new_item)
 
         db.session.commit()
@@ -160,7 +160,7 @@ def scrape_head():
                 src = "No image src"
 
             # Create and add the Item to the database
-            new_item = Item(name=name, slot=head, image=src)
+            new_item = Item(name=name, slot="head", image=src)
             db.session.add(new_item)
 
         db.session.commit()
@@ -186,7 +186,7 @@ def scrape_legs():
                 src = "No image src"
 
             # Create and add the Item to the database
-            new_item = Item(name=name, slot=legs, image=src)
+            new_item = Item(name=name, slot="legs", image=src)
             db.session.add(new_item)
 
         db.session.commit()
@@ -212,7 +212,7 @@ def scrape_neck():
                 src = "No image src"
 
             # Create and add the Item to the database
-            new_item = Item(name=name, slot=neck, image=src)
+            new_item = Item(name=name, slot="neck", image=src)
             db.session.add(new_item)
 
         db.session.commit()
@@ -238,7 +238,7 @@ def scrape_ring():
                 src = "No image src"
 
             # Create and add the Item to the database
-            new_item = Item(name=name, slot=ring, image=src)
+            new_item = Item(name=name, slot="ring", image=src)
             db.session.add(new_item)
 
         db.session.commit()
@@ -264,7 +264,7 @@ def scrape_shield():
                 src = "No image src"
 
             # Create and add the Item to the database
-            new_item = Item(name=name, slot=shield, image=src)
+            new_item = Item(name=name, slot="shield", image=src)
             db.session.add(new_item)
 
         db.session.commit()
@@ -290,7 +290,7 @@ def scrape_weapon():
                 src = "No image src"
 
             # Create and add the Item to the database
-            new_item = Item(name=name, slot=weapon, image=src)
+            new_item = Item(name=name, slot="weapon", image=src)
             db.session.add(new_item)
 
         db.session.commit()
@@ -304,3 +304,16 @@ if __name__ == '__main__':
     with app.app_context():
         print("Starting seed...")
         # Seed code goes here!
+        db.drop_all()
+        db.create_all()
+
+        scrape_ammo()
+        scrape_body()
+        scrape_cape()
+        scrape_feet()
+        scrape_hands()
+        scrape_legs()
+        scrape_neck()
+        scrape_ring()
+        scrape_shield()
+        scrape_weapon()
