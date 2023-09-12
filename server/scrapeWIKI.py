@@ -20,8 +20,6 @@ try:
             src = "No image src"
 
         print(name, src)
-        
-        
 
 except Exception as e:
     print(e)
