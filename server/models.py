@@ -17,6 +17,8 @@ class User(db.Model, SerializerMixin):
     username = db.Column(db.String(), unique = True, nullable = False)
     _password = db.Column(db.String(), nullable = False)
 
+    setups = db.relationship('Setup', backref='user')
+
     @validates('username')
     def validate_username(self, key, username):
         existing_user = User.query.filter(User.username == username).first()
@@ -24,8 +26,19 @@ class User(db.Model, SerializerMixin):
             raise ValueError('Username is unavailable')
         return username
     
+    @property           ##### Raises AttributeError if someone tries to access password of a User
+    def password(self):
+        raise AttributeError('passwords cannot be viewed')
+
+    @password.setter    ##### Stores the hashed password in the _password attribute
+    def password(self, password):
+        self._password = bcrypt.generate_password_hash(password).decode('utf-8')
+
+    def check_password(self, password):     ##### Checks entered password against the hashed password from the database
+        return bcrypt.check_password_hash(self._password, password)
+
     def __repr__(self):
-        return f"Username: {self.username}, Password: {self._password}"
+        return f"Username: {self.username}, Email: {self.email}"
 
 
 class Setup(db.Model, SerializerMixin):
@@ -40,7 +53,6 @@ class Setup(db.Model, SerializerMixin):
     users = db.relationship("User", back_populates = 'setups')
     items = association_proxy('setup_items', 'item')
 
-
 class Item(db.Model, SerializerMixin):
     __tablename__ = "items"
 
@@ -49,7 +61,7 @@ class Item(db.Model, SerializerMixin):
     slot = db.Column(db.String(), nullable = False)
     image = db.Column(db.String(), nullable = False)
 
-    setups = association_proxy('item_setups', 'setup')
+    setups = association_proxy('setup_items', 'setup')
 
 class SetupItem(db.Model, SerializerMixin):
     __tablename__ = "setupItems"
