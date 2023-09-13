@@ -30,9 +30,9 @@ def signup():
 
     return jsonify({"User registered successfully"})
 
-# @app.route('/')
-# def index():
-#     return '<h1>Phase 4 Project Server</h1>'
+@app.route('/')
+def index():
+    return '<h1>Phase 4 Project Server</h1>'
 
 
 if __name__ == '__main__':

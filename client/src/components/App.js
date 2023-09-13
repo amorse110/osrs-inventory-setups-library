@@ -1,22 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { Switch, Route } from "react-router-dom";
-import AddSetup from "./AddSetup";
-import Homepage from "./HomePage";
-import Login from "./Login";
-import Setups from "./Setups";
-import SignUp from "./SignUp";
+// import React, { useEffect, useState, useContext } from "react";
+import { Route, Switch } from "react-router-dom";
+import { Navbar } from "./Navbar"
+import { HomePage } from "./pages/HomePage";
+import { Setups } from "./pages/Setups";
+import { Login } from "./pages/Login";
+import { SignUp } from "./pages/SignUp";
+import { AddSetup } from "./pages/AddSetup";
 
 function App() {
-  return(
-  <div>
-    <Switch>
-      <Route path="/"><Homepage /></Route>
-      <Route path="/login"><Login /></Route>
-      <Route path="/signup"><SignUp /></Route>
-      <Route path="/setups"><Setups /></Route>
-      <Route path="/add_setup"><AddSetup /></Route>
-    </Switch>
-  </div>
+  return (
+    <div className="App">
+      <Navbar />
+      <Switch>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/setups" element={<Setups />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/add_setup" element={<AddSetup />} />
+      </Switch>
+    </div>
   );
 }
 
