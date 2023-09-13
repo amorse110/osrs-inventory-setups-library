@@ -1,59 +1,63 @@
 import React, { useState } from 'react'
-
-
-const slot_types = [
-  'ammo', 'body', 'cape', 'feet',
-  'hands', 'head', 'legs', 'neck',
-  'ring', 'shield', 'weapon'
-];
-
+import './styles.css'
 
 function AddSetup() {
   return (
-    <div>
+    <div className="center-container">
       <div>
-        <h1>Head</h1>
+        <h1>Title</h1>
         <input type="text"/>
       </div>
       <div>
-        <h1>Cape</h1>
+        <h3>Head</h3>
         <input type="text"/>
       </div>
       <div>
-        <h1>Neck</h1>
+        <h3>Cape</h3>
         <input type="text"/>
       </div>
       <div>
-        <h1>Ammo</h1>
+        <h3>Neck</h3>
         <input type="text"/>
       </div>
       <div>
-        <h1>Weapon</h1>
+        <h3>Ammo</h3>
         <input type="text"/>
       </div>
       <div>
-        <h1>Body</h1>
+        <h3>Weapon</h3>
         <input type="text"/>
       </div>
       <div>
-        <h1>Shield</h1>
+        <h3>Body</h3>
         <input type="text"/>
       </div>
       <div>
-        <h1>Legs</h1>
+        <h3>Shield</h3>
         <input type="text"/>
       </div>
       <div>
-        <h1>Hands</h1>
+        <h3>Legs</h3>
         <input type="text"/>
       </div>
       <div>
-        <h1>Feet</h1>
+        <h3>Hands</h3>
         <input type="text"/>
       </div>
       <div>
-        <h1>Ring</h1>
+        <h3>Feet</h3>
         <input type="text"/>
+      </div>
+      <div>
+        <h3>Ring</h3>
+        <input type="text"/>
+      </div>
+      <div>
+        <h3>Description</h3>
+        <textarea 
+          rows={7}
+          cols={35}
+        />
       </div>
       <button>Add Setup</button>
     </div>
