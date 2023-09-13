@@ -1,7 +1,14 @@
 import React from 'react'
 
-export const Login = () => {
+function Login() {
   return (
-    <div>Login</div>
-  )
+    <div>
+      <h3>Username</h3>
+      <input type="text" />
+      <h3>Password</h3>
+      <input type="text" />
+    </div>
+  );
 }
+
+export default Login;

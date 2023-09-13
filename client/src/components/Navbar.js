@@ -8,7 +8,7 @@ export const Navbar = () => {
 
   return (
     <nav>
-        <Link to="/" className="title">Home</Link>
+        <Link to="/" className="title">OSRS Setup Library</Link>
         <div 
             className="menu" 
             onClick={() => {
@@ -27,7 +27,7 @@ export const Navbar = () => {
                 <NavLink to="/add_setup">Add Setup</NavLink>
             </li>
             <li>
-                <NavLink to="/login">Login</NavLink>
+                <NavLink to="/login">Log In</NavLink>
             </li>
             <li>
                 <NavLink to="/signup">Sign Up</NavLink>

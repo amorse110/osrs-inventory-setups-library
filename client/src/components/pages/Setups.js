@@ -1,7 +1,11 @@
 import React from 'react'
 
-export const Setups = () => {
+function Setups() {
   return (
-    <div></div>
-  )
+    <div>
+      Setups go here
+    </div>
+  );
 }
+
+export default Setups;
