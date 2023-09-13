@@ -14,7 +14,7 @@ class User(db.Model, SerializerMixin):
     username = db.Column(db.String(), unique = True, nullable = False)
     _password = db.Column(db.String(), nullable = False)
 
-    setups = db.relationship('Setup', back_populates='user')
+    setups = db.relationship('Setup', back_populates='user', cascade='all, delete-orphan')
 
     @validates('username')
     def validate_username(self, key, username):
@@ -49,7 +49,7 @@ class Setup(db.Model, SerializerMixin):
 
     setup_items = db.relationship('SetupItem', back_populates='setup')
     user = db.relationship("User", back_populates = 'setups')
-    items = db.relationship('Item', secondary='setupItems', back_populates='setups')
+    items = db.relationship('Item', secondary='setupItems', back_populates='setups', overlaps="setup_items")
 
 class Item(db.Model, SerializerMixin):
     __tablename__ = "items"
@@ -59,8 +59,8 @@ class Item(db.Model, SerializerMixin):
     slot = db.Column(db.String(), nullable = False)
     image = db.Column(db.String(), nullable = False)
     
-    item_setups = db.relationship('SetupItem', back_populates='item')
-    setups = db.relationship('Setup', secondary='setupItems', back_populates='items')
+    item_setups = db.relationship('SetupItem', back_populates='item', overlaps="items")
+    setups = db.relationship('Setup', secondary='setupItems', back_populates='items', overlaps="setup_items")
 
 class SetupItem(db.Model, SerializerMixin):
     __tablename__ = "setupItems"
@@ -70,5 +70,5 @@ class SetupItem(db.Model, SerializerMixin):
     setup_id = db.Column(db.Integer(), db.ForeignKey('setups.id'))
     item_id = db.Column(db.Integer(), db.ForeignKey('items.id'))
 
-    setup = db.relationship('Setup', back_populates='setup_items')
-    item = db.relationship('Item', back_populates='item_setups')
+    setup = db.relationship('Setup', back_populates='setup_items', overlaps="items, setups")
+    item = db.relationship('Item', back_populates='item_setups', overlaps="items, setups")
