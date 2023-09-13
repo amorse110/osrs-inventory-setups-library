@@ -44,7 +44,7 @@ class Setup(db.Model, SerializerMixin):
     id = db.Column(db.Integer(), primary_key = True)
     title = db.Column(db.String(), nullable = False)
     description = db.Column(db.String(), nullable = False)
-    
+
     user_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
 
     setup_items = db.relationship('SetupItem', back_populates='setup')

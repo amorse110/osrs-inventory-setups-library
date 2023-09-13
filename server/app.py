@@ -18,9 +18,6 @@ from models import User, db
 def signup():
     data = request.get_json()
     user = User(
-        first_name=data['first_name'],
-        last_name=data['last_name'],
-        email=data['email'],
         username=data['username']
     )
     user.password = data['password']
