@@ -10,7 +10,20 @@ import requests
 
 # Local imports
 from app import app
-from models import db, Item
+from models import db, Item, User
+
+###### CREATING A SINGLE DEFAULT USER #####
+
+def create_default_user():
+    try:
+        user = User(username="austin", password="osrsaustin")
+        db.session.add(user)
+        db.session.commit()
+        print("Default user created")
+    except Exception as e:
+        print(f"Error creating default user: {e}")
+
+########################### SCRAPING ALL THE ITEMS FROM THE OSRS WIKI TABLES ###################################
 
 def scrape_ammo():
     try:
@@ -307,6 +320,7 @@ if __name__ == '__main__':
         db.drop_all()
         db.create_all()
 
+        create_default_user()
         scrape_ammo()
         scrape_body()
         scrape_cape()

@@ -35,7 +35,7 @@ class User(db.Model, SerializerMixin):
         return bcrypt.check_password_hash(self._password, password)
 
     def __repr__(self):
-        return f"Username: {self.username}, Email: {self.email}"
+        return f"Username: {self.username}"
 
 
 class Setup(db.Model, SerializerMixin):
