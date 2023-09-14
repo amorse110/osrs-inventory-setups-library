@@ -1,17 +1,20 @@
 import React, { useState } from 'react'
+import { useHistory } from "react-router-dom"
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = (e) => {
+  const history = useHistory();
+
+  function handleLogin(e) {
     e.preventDefault();
     console.log(username);
   }
 
   return (
     <div className='center-container'>
-      <form>
+      <form onSubmit={handleLogin}>
         <h1>Login</h1>
         <div />
         <label htmlFor='Username'>Username:</label>
@@ -22,7 +25,7 @@ function Login() {
           type="password" placeholder='Password'/>
         <button type="submit">Submit</button>
       </form>
-      <button>Don't have an account yet? Register Here!</button>
+      <button onClick={() => history.push('/signup')}>Don't have an account yet? Register Here!</button>
     </div>
   );
 }
