@@ -27,6 +27,15 @@ export const Navbar = () => {
                 <NavLink to="/add_setup"><strong>Add Setup</strong></NavLink>
             </li>
             <li>
+                {/* ######################### COME BACK AND FIX THIS WHEN USER IS SET UP ########################### */}
+                {/* {user ? (
+                    <div>
+                        <p>Welcome, {user.username}!</p>
+                        <button onClick={handleLogout}>Logout</button>
+                    </div>
+                ) : (
+                    <NavLink to="/login"><strong>Log In</strong></NavLink>
+                )} */}
                 <NavLink to="/login"><strong>Log In</strong></NavLink>
             </li>
             <li>
