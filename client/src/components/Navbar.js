@@ -1,10 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, NavLink } from "react-router-dom"
+import { UserContext } from './UserContext';
 
 import "./Navbar.css";
 
 export const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false)
+
+    const [user, setUser] = useContext(UserContext)
+
+    console.log(user)
+    function handleLogout() {
+        fetch('/logout', {
+            method: 'DELETE'
+        }).then((res) => {
+            if (res.ok) {
+                setUser(null);
+            }
+        });
+    }
 
   return (
     <nav>
@@ -28,15 +42,15 @@ export const Navbar = () => {
             </li>
             <li>
                 {/* ######################### COME BACK AND FIX THIS WHEN USER IS SET UP ########################### */}
-                {/* {user ? (
+                {user ? (
                     <div>
                         <p>Welcome, {user.username}!</p>
                         <button onClick={handleLogout}>Logout</button>
                     </div>
                 ) : (
                     <NavLink to="/login"><strong>Log In</strong></NavLink>
-                )} */}
-                <NavLink to="/login"><strong>Log In</strong></NavLink>
+                )}
+                {/* <NavLink to="/login"><strong>Log In</strong></NavLink> */}
             </li>
             <li>
                 <NavLink to="/signup"><strong>Sign Up</strong></NavLink>

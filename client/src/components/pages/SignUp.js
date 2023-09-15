@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { useHistory } from "react-router-dom";
+import { UserContext } from '../UserContext';
 
 
 function SignUp() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const [user, setUser] = useContext(UserContext)
 
   const history = useHistory();
 
@@ -21,13 +24,17 @@ function SignUp() {
         password: password,
       }),
     })
-    .then(res => res.json())
-    .then((data) => {
-      if (data.success) {
-        history.push('/login');
-      } else {
-        alert(data.message);
+    .then(res => {
+      if (res.ok) {
+        return res.json()
       }
+      else {
+        alert("invalid credentials")
+      }
+    })
+    .then((user) => {
+        setUser(user);
+        history.push('/');
     })
     .catch(error => {
       console.error('There was an error!', error);

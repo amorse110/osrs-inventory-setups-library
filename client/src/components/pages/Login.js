@@ -1,15 +1,39 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { UserContext } from '../UserContext'
 import { useHistory } from "react-router-dom"
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  const[_, setUser] = useContext(UserContext)
+
   const history = useHistory();
 
   function handleLogin(e) {
     e.preventDefault();
-    console.log(username);
+
+    fetch("/login", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+      }),
+    }).then((res) => {
+      if (res.ok) {
+        return res.json()
+      }
+      else {
+        alert("login failed")
+      }
+    })
+      .then(user => {
+        setUser(user);
+        history.push('/');
+      });
   }
 
   return (

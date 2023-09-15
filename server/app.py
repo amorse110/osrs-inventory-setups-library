@@ -33,10 +33,74 @@ def signup():
     db.session.add(user)
     try:
         db.session.commit()
-        return jsonify({"message": "User created successfully"}), 201
+        return jsonify(user.to_dict()), 201
     except Exception as e:
         db.session.rollback()
-        return jsonify({"message": str(e)}), 500
+        return jsonify({"message": str(e), "success": False}), 500
+
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.json
+
+    user = User.query.filter_by(username=data['username']).first()
+    if user and user.check_password(data['password']):
+        session['logged_in'] = True
+        session['user_id'] = user.id
+        return jsonify(user.to_dict()), 200
+    else:
+        return jsonify({"message": "Incorrect username or password", "success": False}), 401
+    
+@app.route('/autologin', methods=['GET'])
+def autologin():
+    user = User.query.filter_by(id=session['user_id']).first()
+    if user:
+        return jsonify(user.to_dict()), 200
+    else:
+        return jsonify({"message": "user not logged in", "success": False}), 401
+
+@app.route('/logout', methods =['DELETE'])
+def logout():
+    if 'logged_in' in session:
+        session.clear()
+        return jsonify({"message": "Logout successful", "success": True}), 204
+    else:
+        return jsonify({"message": "Logout Failed", "success": False}), 401
+
+if __name__ == '__main__':
+    app.run(port=5555, debug=True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # class Signup(Resource):
@@ -54,8 +118,3 @@ def signup():
 #         return new_user.to_dict()
 
 # api.add_resource(Signup, "/signup")
-
-
-if __name__ == '__main__':
-    app.run(port=5555, debug=True)
-
