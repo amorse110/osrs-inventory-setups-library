@@ -65,6 +65,11 @@ def logout():
         return jsonify({"message": "Logout successful", "success": True}), 204
     else:
         return jsonify({"message": "Logout Failed", "success": False}), 401
+    
+@app.route('/items/<slot>', methods=['GET'])
+def get_items_by_slot(slot):
+    items = Item.query.filter_by(slot=slot).all()
+    return jsonify([item.to_dict() for item in items]), 200
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

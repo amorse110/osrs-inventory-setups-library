@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 import './styles.css'
+import SlotDropdown from './Dropdown';
 
 function AddSetup() {
   return (
@@ -10,47 +11,47 @@ function AddSetup() {
       </div>
       <div>
         <h3>Head</h3>
-        <input type="text"/>
+        <SlotDropdown slot="head"/>
       </div>
       <div>
         <h3>Cape</h3>
-        <input type="text"/>
+        <SlotDropdown slot="cape"/>
       </div>
       <div>
         <h3>Neck</h3>
-        <input type="text"/>
+        <SlotDropdown slot="neck"/>
       </div>
       <div>
         <h3>Ammo</h3>
-        <input type="text"/>
+        <SlotDropdown slot="ammo"/>
       </div>
       <div>
         <h3>Weapon</h3>
-        <input type="text"/>
+        <SlotDropdown slot="weapon"/>
       </div>
       <div>
         <h3>Body</h3>
-        <input type="text"/>
+        <SlotDropdown slot="body"/>
       </div>
       <div>
         <h3>Shield</h3>
-        <input type="text"/>
+        <SlotDropdown slot="shield"/>
       </div>
       <div>
         <h3>Legs</h3>
-        <input type="text"/>
+        <SlotDropdown slot="legs"/>
       </div>
       <div>
         <h3>Hands</h3>
-        <input type="text"/>
+        <SlotDropdown slot="hands"/>
       </div>
       <div>
         <h3>Feet</h3>
-        <input type="text"/>
+        <SlotDropdown slot="feet"/>
       </div>
       <div>
         <h3>Ring</h3>
-        <input type="text"/>
+        <SlotDropdown slot="ring"/>
       </div>
       <div>
         <h3>Description</h3>

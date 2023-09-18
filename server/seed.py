@@ -326,6 +326,7 @@ if __name__ == '__main__':
         scrape_cape()
         scrape_feet()
         scrape_hands()
+        scrape_head()
         scrape_legs()
         scrape_neck()
         scrape_ring()
