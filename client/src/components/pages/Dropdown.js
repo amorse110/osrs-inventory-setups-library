@@ -20,6 +20,8 @@ function SlotDropdown({ slot, onItemSelect, selectedItem }) {
         onItemSelect(slot, selectedItem);
     };
 
+    // console.log(`Slot: ${slot}, Selected Item: ${selectedItem}`);
+    
     return (
         <select style={dropdownStyle} onChange={handleChange} value={selectedItem || ''}>
             <option value="">None</option>

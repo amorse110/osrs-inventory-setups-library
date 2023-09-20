@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
+import { useHistory, useLocation } from 'react-router-dom';
 import { AiFillEdit, AiFillDelete } from 'react-icons/ai';
 import './styles.css'
 
 function Setups() {
+  const history = useHistory();
   const [setups, setSetups] = useState([])
-  const [isEditing, setIsEditing] = useState(false);
-  const [currentEditingSetup, setCurrentEditingSetup] = useState(null);
 
   useEffect(() => {
     fetch('/user-setups')
@@ -34,9 +34,15 @@ function Setups() {
 }
 
   function handleEdit(setupId) {
-    setIsEditing(true);
     const setupToEdit = setups.find(setup => setup.id === setupId);
-    setCurrentEditingSetup(setupToEdit);
+    if (setupToEdit) {
+      history.push({
+        pathname: `/edit-setup/${setupId}`,
+        state: { setup: setupToEdit }
+      });
+    } else {
+      console.error(`Setup with id ${setupId} not found`);
+    }
   }
 
   return (
@@ -44,9 +50,11 @@ function Setups() {
       {setups.map((setup, index) => (
         <div key={index} className="setup-card">
           <div className='card-header'>
-            <h3>Setup {index + 1}</h3>
-            <AiFillEdit className='edit-icon' size={24} onClick={() => handleEdit(setup.id)} />
-            <AiFillDelete className='delete-icon' onClick={() => handleDelete(setup.id)} />
+            <h3>{setup.title}</h3>
+            <div className="card-actions">
+              <AiFillEdit className='edit-icon' size={24} onClick={() => handleEdit(setup.id)} />
+              <AiFillDelete className='delete-icon' onClick={() => handleDelete(setup.id)} />
+            </div>
           </div>
           <div className="setup-items">
             {setup?.setup_items?.map(item => (
@@ -56,6 +64,7 @@ function Setups() {
               </div>
             ))}
           </div>
+          <p style={{ marginTop: '10px' }}><strong>Description: </strong>{setup.description}</p>
         </div>
       ))}
     </div>

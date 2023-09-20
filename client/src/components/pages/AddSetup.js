@@ -6,8 +6,6 @@ function AddSetup() {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [errorMessage, setErrorMessage] = useState("")
-  const [isEditing, setIsEditing] = useState(false);
-  const [currentEditingSetup, setCurrentEditingSetup] = useState(null);
 
   const [selectedItems, setSelectedItems] = useState({
     head: "",
@@ -59,82 +57,53 @@ function AddSetup() {
     });
   }
 
-  function handleEditSubmit(event) {
-    event.preventDefault();
-
-    const setupData = {
-        title,
-        description,
-        ...selectedItems
-    };
-
-    fetch(`/edit-setup/${currentEditingSetup.id}`, { // Assuming this is the route for editing
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify(setupData)
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log(data);
-        setErrorMessage("");
-        setIsEditing(false); // Exit editing mode after successfully editing
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
-
-
   return (
     <form className="center-container" onSubmit={handleSubmit}>
       {errorMessage && <p className="error-message">{errorMessage}</p>}
       <h1>Title</h1>
       <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
       <label><strong>Head</strong></label>
-      <SlotDropdown slot="head" selectedItem={currentEditingSetup ? currentEditingSetup.head : ""} onItemSelect={(slot, item) => {
+      <SlotDropdown slot="head" selectedItem="" onItemSelect={(slot, item) => {
         setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
       }}/>
       <label><strong>Cape</strong></label>
-      <SlotDropdown slot="cape" selectedItem={currentEditingSetup ? currentEditingSetup.cape : ""} onItemSelect={(slot, item) => {
+      <SlotDropdown slot="cape" selectedItem="" onItemSelect={(slot, item) => {
         setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
       }}/>
       <label><strong>Neck</strong></label>
-      <SlotDropdown slot="neck" selectedItem={currentEditingSetup ? currentEditingSetup.neck : ""} onItemSelect={(slot, item) => {
+      <SlotDropdown slot="neck" selectedItem="" onItemSelect={(slot, item) => {
         setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
       }}/>
       <label><strong>Ammo</strong></label>
-      <SlotDropdown slot="ammo" selectedItem={currentEditingSetup ? currentEditingSetup.ammo : ""} onItemSelect={(slot, item) => {
+      <SlotDropdown slot="ammo" selectedItem="" onItemSelect={(slot, item) => {
         setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
       }}/>
       <label><strong>Weapon</strong></label>
-      <SlotDropdown slot="weapon" selectedItem={currentEditingSetup ? currentEditingSetup.weapon : ""} onItemSelect={(slot, item) => {
+      <SlotDropdown slot="weapon" selectedItem="" onItemSelect={(slot, item) => {
         setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
       }}/>
       <label><strong>Body</strong></label>
-      <SlotDropdown slot="body" selectedItem={currentEditingSetup ? currentEditingSetup.body : ""} onItemSelect={(slot, item) => {
+      <SlotDropdown slot="body" selectedItem="" onItemSelect={(slot, item) => {
         setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
       }}/>
       <label><strong>Shield</strong></label>
-      <SlotDropdown slot="shield" selectedItem={currentEditingSetup ? currentEditingSetup.shield : ""} onItemSelect={(slot, item) => {
+      <SlotDropdown slot="shield" selectedItem="" onItemSelect={(slot, item) => {
         setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
       }}/>
       <label><strong>Legs</strong></label>
-      <SlotDropdown slot="legs" selectedItem={currentEditingSetup ? currentEditingSetup.legs : ""} onItemSelect={(slot, item) => {
+      <SlotDropdown slot="legs" selectedItem="" onItemSelect={(slot, item) => {
         setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
       }}/>
       <label><strong>Hands</strong></label>
-      <SlotDropdown slot="hands" selectedItem={currentEditingSetup ? currentEditingSetup.hands : ""} onItemSelect={(slot, item) => {
+      <SlotDropdown slot="hands" selectedItem="" onItemSelect={(slot, item) => {
         setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
       }}/>
       <label><strong>Feet</strong></label>
-      <SlotDropdown slot="feet" selectedItem={currentEditingSetup ? currentEditingSetup.feet : ""} onItemSelect={(slot, item) => {
+      <SlotDropdown slot="feet" selectedItem="" onItemSelect={(slot, item) => {
         setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
       }}/>
       <label><strong>Ring</strong></label>
-      <SlotDropdown slot="ring" selectedItem={currentEditingSetup ? currentEditingSetup.ring : ""} onItemSelect={(slot, item) => {
+      <SlotDropdown slot="ring" selectedItem="" onItemSelect={(slot, item) => {
         setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
       }}/>
       <label><strong>Description</strong></label>
@@ -143,11 +112,7 @@ function AddSetup() {
           cols={35}
           value={description} onChange={(e) => setDescription(e.target.value)}
       />
-      {
-      isEditing ?
-      <button type="submit" onClick={handleEditSubmit}>Confirm Edits</button> :
       <button type="submit">Add Setup</button>
-      }
     </form>
   );
 }
