@@ -1,67 +1,107 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './styles.css'
 import SlotDropdown from './Dropdown';
 
 function AddSetup() {
+  const [title, setTitle] = useState("")
+  const [description, setDescription] = useState("")
+  const [selectedItems, setSelectedItems] = useState({
+    head: "",
+    cape: "",
+    neck: "",
+    ammo: "",
+    weapon: "",
+    body: "",
+    shield: "",
+    legs: "",
+    hands: "",
+    feet: "",
+    ring: ""
+  });
+  
+  function handleSubmit(event) {
+    event.preventDefault();
+  
+    const setupData = {
+      title,
+      description,
+      ...selectedItems
+    };
+  
+    fetch('/add-setup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify(setupData)
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data);
+    })
+    .catch(error => {
+      console.log('Error:', error);
+    })
+  }
+
+
   return (
-    <div className="center-container">
-      <div>
-        <h1>Title</h1>
-        <input type="text"/>
-      </div>
-      <div>
-        <h3>Head</h3>
-        <SlotDropdown slot="head"/>
-      </div>
-      <div>
-        <h3>Cape</h3>
-        <SlotDropdown slot="cape"/>
-      </div>
-      <div>
-        <h3>Neck</h3>
-        <SlotDropdown slot="neck"/>
-      </div>
-      <div>
-        <h3>Ammo</h3>
-        <SlotDropdown slot="ammo"/>
-      </div>
-      <div>
-        <h3>Weapon</h3>
-        <SlotDropdown slot="weapon"/>
-      </div>
-      <div>
-        <h3>Body</h3>
-        <SlotDropdown slot="body"/>
-      </div>
-      <div>
-        <h3>Shield</h3>
-        <SlotDropdown slot="shield"/>
-      </div>
-      <div>
-        <h3>Legs</h3>
-        <SlotDropdown slot="legs"/>
-      </div>
-      <div>
-        <h3>Hands</h3>
-        <SlotDropdown slot="hands"/>
-      </div>
-      <div>
-        <h3>Feet</h3>
-        <SlotDropdown slot="feet"/>
-      </div>
-      <div>
-        <h3>Ring</h3>
-        <SlotDropdown slot="ring"/>
-      </div>
-      <div>
-        <h3>Description</h3>
-        <textarea 
+    <form className="center-container" onSubmit={handleSubmit}>
+      <h1>Title</h1>
+      <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
+      <label><strong>Head</strong></label>
+      <SlotDropdown slot="head" onItemSelect={(slot, item) => {
+        setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
+      }}/>
+      <label><strong>Cape</strong></label>
+      <SlotDropdown slot="cape" onItemSelect={(slot, item) => {
+        setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
+      }}/>
+      <label><strong>Neck</strong></label>
+      <SlotDropdown slot="neck" onItemSelect={(slot, item) => {
+        setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
+      }}/>
+      <label><strong>Ammo</strong></label>
+      <SlotDropdown slot="ammo" onItemSelect={(slot, item) => {
+        setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
+      }}/>
+      <label><strong>Weapon</strong></label>
+      <SlotDropdown slot="weapon" onItemSelect={(slot, item) => {
+        setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
+      }}/>
+      <label><strong>Body</strong></label>
+      <SlotDropdown slot="body" onItemSelect={(slot, item) => {
+        setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
+      }}/>
+      <label><strong>Shield</strong></label>
+      <SlotDropdown slot="shield" onItemSelect={(slot, item) => {
+        setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
+      }}/>
+      <label><strong>Legs</strong></label>
+      <SlotDropdown slot="legs" onItemSelect={(slot, item) => {
+        setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
+      }}/>
+      <label><strong>Hands</strong></label>
+      <SlotDropdown slot="hands" onItemSelect={(slot, item) => {
+        setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
+      }}/>
+      <label><strong>Feet</strong></label>
+      <SlotDropdown slot="feet" onItemSelect={(slot, item) => {
+        setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
+      }}/>
+      <label><strong>Ring</strong></label>
+      <SlotDropdown slot="ring" onItemSelect={(slot, item) => {
+        setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
+      }}/>
+      <label><strong>Description</strong></label>
+      <textarea 
           rows={7}
           cols={35}
-        />
-      </div>
-      <button>Add Setup</button>
-    </div>
+          value={description} onChange={(e) => setDescription(e.target.value)}
+      />
+      <button type="submit">Add Setup</button>
+    </form>
   );
 }
 

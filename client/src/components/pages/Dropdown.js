@@ -1,17 +1,28 @@
 import React, { useEffect, useState } from 'react';
 
-function SlotDropdown({ slot }) {
+function SlotDropdown({ slot, onItemSelect }) {
     const [items, setItems] = useState([]);
+    const dropdownStyle = { width: '150px' };
 
     useEffect(() => {
-        fetch('http://localhost:5555/items/' + slot)
+        fetch(`/items/${slot}`)
             .then(res => res.json())
             .then(data => setItems(data));
     
     }, [slot]);
 
+    const handleChange = (event) => {
+        const selectedItem = event.target.value;
+        handleSelection(selectedItem);
+    };
+
+    const handleSelection = (selectedItem) => {
+        onItemSelect(slot, selectedItem);
+    };
+
     return (
-        <select>
+        <select style={dropdownStyle} onChange={handleChange}>
+            <option value="">None</option>
             {items.map(item => (
                 <option key={item.id} value={item.id}>
                     {item.name}

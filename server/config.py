@@ -15,8 +15,12 @@ from flask_bcrypt import Bcrypt
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = b'8f15cfe4a2dbaffa5c0e2e319b0355c9e'
+# app.secret_key = b'8f15cfe4a2dbaffa5c0e2e319b0355c9e'
+app.secret_key = b'\xd1\x13.d7\xdc\xd5\x15\x1d\xef\x9c\x0b\xe9\xa2\xeda'
 app.json.compact = False
+
+# Add SESSION_COOKIE_SECURE
+app.config['SESSION_COOKIE_SECURE'] = True
 
 # Define metadata, instantiate db
 metadata = MetaData(naming_convention={

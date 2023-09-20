@@ -14,6 +14,8 @@ class User(db.Model, SerializerMixin):
 
     setups = db.relationship('Setup', back_populates='user', cascade='all, delete-orphan')
 
+    serialize_rules=("-setups.user",)
+
     @validates('username')
     def validate_username(self, key, username):
         existing_user = User.query.filter(User.username == username).first()
@@ -47,7 +49,8 @@ class Setup(db.Model, SerializerMixin):
 
     setup_items = db.relationship('SetupItem', back_populates='setup')
     user = db.relationship("User", back_populates = 'setups')
-    items = db.relationship('Item', secondary='setupItems', back_populates='setups', overlaps="setup_items")
+
+    serialize_rules=("-setup_items.setup",)
 
 class Item(db.Model, SerializerMixin):
     __tablename__ = "items"
@@ -58,7 +61,7 @@ class Item(db.Model, SerializerMixin):
     image = db.Column(db.String(), nullable = False)
     
     item_setups = db.relationship('SetupItem', back_populates='item', overlaps="items")
-    setups = db.relationship('Setup', secondary='setupItems', back_populates='items', overlaps="setup_items")
+    serialize_rules=("-item_setups.item", "-item_setups.setup")
 
 class SetupItem(db.Model, SerializerMixin):
     __tablename__ = "setupItems"
