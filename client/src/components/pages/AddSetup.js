@@ -5,6 +5,8 @@ import SlotDropdown from './Dropdown';
 function AddSetup() {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
+  const [errorMessage, setErrorMessage] = useState("")
+
   const [selectedItems, setSelectedItems] = useState({
     head: "",
     cape: "",
@@ -36,18 +38,29 @@ function AddSetup() {
       credentials: 'include',
       body: JSON.stringify(setupData)
     })
-    .then(res => res.json())
+    .then(res => {
+      if (res.status === 404) {
+        throw new Error('User not logged in');
+      }
+      return res.json();
+    })
     .then(data => {
       console.log(data);
+      setErrorMessage("")
     })
     .catch(error => {
-      console.log('Error:', error);
-    })
+      if (error.message === 'User not logged in') {
+        setErrorMessage("Please log in or create an account to create a setup")
+      } else {
+        console.log('Error:', error);
+      }
+    });
   }
 
 
   return (
     <form className="center-container" onSubmit={handleSubmit}>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
       <h1>Title</h1>
       <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
       <label><strong>Head</strong></label>

@@ -29,3 +29,39 @@ button {
     border-radius: 5px;
     cursor: pointer;
 }
+
+.error-message {
+    color: red;
+    font-weight: bold;
+    padding: 10px;
+    border: 1px solid red;
+    margin-top: 10px;
+    background-color: #ffe6e6;
+}
+
+.setup-card {
+    border: 1px solid #e0e0e0;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+  }
+  
+  .setup-items {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .item-card {
+    flex: 1;
+    min-width: 100px;
+    border: 1px solid #e0e0e0;
+    margin: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    text-align: center;
+  }
+  
+  .item-card img {
+    max-width: 80px;
+    margin-bottom: 5px;
+  }
