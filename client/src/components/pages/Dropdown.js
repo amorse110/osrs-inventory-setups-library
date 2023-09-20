@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-function SlotDropdown({ slot, onItemSelect }) {
+function SlotDropdown({ slot, onItemSelect, selectedItem }) {
     const [items, setItems] = useState([]);
     const dropdownStyle = { width: '150px' };
 
@@ -21,7 +21,7 @@ function SlotDropdown({ slot, onItemSelect }) {
     };
 
     return (
-        <select style={dropdownStyle} onChange={handleChange}>
+        <select style={dropdownStyle} onChange={handleChange} value={selectedItem || ''}>
             <option value="">None</option>
             {items.map(item => (
                 <option key={item.id} value={item.id}>

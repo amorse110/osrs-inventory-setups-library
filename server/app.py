@@ -136,6 +136,89 @@ class UserSetupsResource(Resource):
     
 api.add_resource(UserSetupsResource, '/user-setups')
 
+class DeleteSetupResource(Resource):
+    def delete(self, setup_id):
+        # Ensure the user is logged in
+        if 'user_id' not in session:
+            return {'message': 'user not logged in', 'success': False}, 401
+        
+        # Find the setup in the database
+        setup = Setup.query.filter_by(id=setup_id).first()
+
+        # If no setup is found, return an error
+        if not setup:
+            return {'message': 'setup not found', 'success': False}, 404
+        
+        # Ensure the user owns the setup they're trying to delete
+        if setup.user_id != session['user_id']:
+            return {'message': 'unauthorized to delete this setup', 'success': False}, 403
+
+        # Delete the setup
+        db.session.delete(setup)
+        db.session.commit()
+
+        return {'message': 'setup deleted successfully', 'success': True}, 200
+
+api.add_resource(DeleteSetupResource, '/delete-setup/<int:setup_id>')
+
+class GetSetupResource(Resource):
+    def get(self, setup_id):
+        setup = Setup.query.filter_by(id=setup_id).first()
+        if not setup:
+            return {"message": "Setup not found", "success": False}, 404
+
+        # Convert the setup and its items into a format suitable for your frontend
+        setup_data = setup.to_dict()  # Assuming to_dict() gives you a dict representation of your setup
+        items = {item.slot: item.item_id for item in setup.setup_items}  # Assuming a relationship from setup to items
+
+        return {**setup_data, **items}, 200
+
+api.add_resource(GetSetupResource, '/get-setup/<int:setup_id>')
+
+class EditSetupResource(Resource):
+    def put(self, setup_id):
+        # Ensure user is logged in
+        if 'user_id' not in session:
+            return {"message": "User not logged in", "success": False}, 401
+
+        # Fetch the setup to be edited
+        setup = Setup.query.filter_by(id=setup_id).first()
+
+        # If setup doesn't exist or doesn't belong to the logged in user
+        if not setup or setup.user_id != session['user_id']:
+            return {"message": "Setup not found or unauthorized", "success": False}, 404
+
+        # Get the updated data from the request
+        data = request.json
+
+        # Update the title and description
+        setup.title = data['title']
+        setup.description = data['description']
+
+        # Update the associated items
+        for slot, item_id in data.items():
+            if slot not in ['title', 'description']:
+                # Fetch the SetupItem for this slot
+                setup_item = SetupItem.query.filter_by(setup_id=setup.id, slot=slot).first()
+                if setup_item:
+                    # If it exists, update the item_id
+                    setup_item.item_id = item_id
+                else:
+                    # If there wasn't an item for this slot before, create a new one
+                    new_setup_item = SetupItem(setup_id=setup.id, item_id=item_id, slot=slot)
+                    db.session.add(new_setup_item)
+
+        try:
+            # Commit the changes
+            db.session.commit()
+            return {"message": "Setup edited successfully", "success": True}, 200
+
+        except Exception as e:
+            db.session.rollback()
+            return {"message": str(e), "success": False}, 500
+
+api.add_resource(EditSetupResource, '/edit-setup/<int:setup_id>')
+
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
 

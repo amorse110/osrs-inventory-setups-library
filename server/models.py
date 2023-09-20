@@ -47,7 +47,7 @@ class Setup(db.Model, SerializerMixin):
 
     user_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
 
-    setup_items = db.relationship('SetupItem', back_populates='setup')
+    setup_items = db.relationship('SetupItem', back_populates='setup', cascade="all, delete-orphan")
     user = db.relationship("User", back_populates = 'setups')
 
     serialize_rules=("-setup_items.setup",)
