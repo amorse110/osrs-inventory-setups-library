@@ -6,7 +6,6 @@ import Setups from "./pages/Setups";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import AddSetup from "./pages/AddSetup";
-import EditSetup from "./pages/EditSetup"
 import { UserContext } from "./UserContext";
 
 function App() {
@@ -21,12 +20,6 @@ function App() {
     });
   }, []);
 
-  // if (!user) return 
-  // <Switch>
-  //   <Route path="/login" component={Login}/>
-  //   <Route path="/signup" component={SignUp}/>
-  // </Switch>
-
   return (
     <div className="App">
       <Navbar />
@@ -36,7 +29,6 @@ function App() {
           <Route path="/login" component={Login} />
           <Route path="/signup" component={SignUp} />
           <Route path="/add_setup" component={AddSetup} />
-          <Route path="/edit-setup/:setupId" component={EditSetup} />
         </Switch>
     </div>
   );

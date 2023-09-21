@@ -161,61 +161,49 @@ class DeleteSetupResource(Resource):
 
 api.add_resource(DeleteSetupResource, '/delete-setup/<int:setup_id>')
 
-class GetSetupResource(Resource):
-    def get(self, setup_id):
-        setup = Setup.query.filter_by(id=setup_id).first()
-        if not setup:
-            return {"message": "Setup not found", "success": False}, 404
+# class GetSetupResource(Resource):
+#     def get(self, setup_id):
+#         setup = Setup.query.filter_by(id=setup_id).first()
+#         if not setup:
+#             return {"message": "Setup not found", "success": False}, 404
 
-        # Convert the setup and its items into a format suitable for your frontend
-        setup_data = setup.to_dict()  # Assuming to_dict() gives you a dict representation of your setup
-        items = {item.slot: item.item_id for item in setup.setup_items}  # Assuming a relationship from setup to items
+#         # Convert the setup and its items into a format suitable for your frontend
+#         setup_data = setup.to_dict()  # Assuming to_dict() gives you a dict representation of your setup
+#         items = {item.slot: item.item_id for item in setup.setup_items}  # Assuming a relationship from setup to items
 
-        return {**setup_data, **items}, 200
+#         return {**setup_data, **items}, 200
 
-api.add_resource(GetSetupResource, '/get-setup/<int:setup_id>')
+# api.add_resource(GetSetupResource, '/get-setup/<int:setup_id>')
 
 class EditSetupResource(Resource):
     def patch(self, setup_id):
-        # Ensure user is logged in
-        if 'user_id' not in session:
-            return {"message": "User not logged in", "success": False}, 401
-
-        # Fetch the setup to be edited
+        data = request.json
         setup = Setup.query.filter_by(id=setup_id).first()
 
-        # If setup doesn't exist or doesn't belong to the logged in user
-        if not setup or setup.user_id != session['user_id']:
-            return {"message": "Setup not found or unauthorized", "success": False}, 404
+        if not setup:
+            return {"message": "setup not found", "success": False}, 404
+        
+        # Ensure the user owns the setup they're trying to edit
+        if setup.user_id != session['user_id']:
+            return {'message': 'unauthorized to edit this setup', 'success': False}, 403
 
-        # Get the updated data from the request
-        data = request.json
-
-        # Update the title and description
-        setup.title = data['title']
-        setup.description = data['description']
-
-        # Update the associated items
-        for slot, item_id in data.items():
-            if slot not in ['title', 'description']:
-                # Fetch the SetupItem for this slot
-                setup_item = SetupItem.query.filter_by(setup_id=setup.id, slot=slot).first()
+        # Update the setup details
+        setup.title = data.get('title', setup.title)
+        setup.description = data.get('description', setup.description)
+        for setup_item_data in data.get('setup_items', []):
+            item_id = setup_item_data.get('item')
+            if item_id:
+                setup_item = SetupItem.query.filter_by(setup_id=setup.id, item_id=item_id).first()
                 if setup_item:
-                    # If it exists, update the item_id
                     setup_item.item_id = item_id
                 else:
-                    # If there wasn't an item for this slot before, create a new one
-                    new_setup_item = SetupItem(setup_id=setup.id, item_id=item_id, slot=slot)
+                    # Handle the case where a SetupItem for the given slot does not exist
+                    new_setup_item = SetupItem(setup_id=setup.id, item_id=item_id)
                     db.session.add(new_setup_item)
 
-        try:
-            # Commit the changes
-            db.session.commit()
-            return {"message": "Setup edited successfully", "success": True}, 200
+        db.session.commit()
 
-        except Exception as e:
-            db.session.rollback()
-            return {"message": str(e), "success": False}, 500
+        return {"message": "Setup edited successfully", "success": True}, 200
         
     def get(self, setup_id):
         setup = Setup.query.filter_by(id=setup_id).first()
@@ -229,97 +217,3 @@ api.add_resource(EditSetupResource, '/edit-setup/<int:setup_id>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
-
-
-
-
-# @app.route('/')
-# def index():
-#     return '<h1>Capstone Project Server</h1>'
-
-# ##### WORKING! #####
-# @app.route('/signup', methods=['POST'])
-# def signup():
-#     data = request.json
-
-#     if not data.get('username') or not data.get('password'):
-#         return jsonify({"message": "Must include username and password"}), 400
-    
-#     user = User()
-#     user.username = data.get('username')
-#     user.password = data.get('password') 
-
-#     db.session.add(user)
-#     try:
-#         db.session.commit()
-#         return jsonify(user.to_dict()), 201
-#     except Exception as e:
-#         db.session.rollback()
-#         return jsonify({"message": str(e), "success": False}), 500
-
-# @app.route('/login', methods=['POST'])
-# def login():
-#     data = request.json
-
-#     user = User.query.filter_by(username=data['username']).first()
-#     if user and user.check_password(data['password']):
-#         session['logged_in'] = True
-#         session['user_id'] = user.id
-#         session['username'] = user.username
-#         return jsonify(user.to_dict()), 200
-#     else:
-#         return jsonify({"message": "Incorrect username or password", "success": False}), 401
-    
-# @app.route('/autologin', methods=['GET'])
-# def autologin():
-#     user = User.query.filter_by(id=session['user_id']).first()
-#     if user:
-#         return jsonify(user.to_dict()), 200
-#     else:
-#         return jsonify({"message": "user not logged in", "success": False}), 401
-
-# @app.route('/logout', methods =['DELETE'])
-# def logout():
-#     if 'logged_in' in session:
-#         session.clear()
-#         return jsonify({"message": "Logout successful", "success": True}), 204
-#     else:
-#         return jsonify({"message": "Logout Failed", "success": False}), 401
-    
-# @app.route('/items/<slot>', methods=['GET'])
-# def get_items_by_slot(slot):
-#     items = Item.query.filter_by(slot=slot).all()
-#     return jsonify([item.to_dict() for item in items]), 200
-
-# @app.route('/add-setup', methods=['POST'])
-# def add_setup():
-#     data = request.json
-
-#     if 'user_id' not in session:
-#         return jsonify({"message": "user not logged in", "success": False}), 401
-    
-#     user = User.query.filter_by(id=session['user_id']).first()
-
-#     if not user:
-#         return jsonify({"message": "user not found", "success": False}), 404
-    
-#     if user:
-#         setup = Setup(title=data['title'], description=data['description'],
-#                       user_id=user.id)
-#         db.session.add(setup)
-#         db.session.commit()
-#         for slot, item_id in data.items():
-#             if slot not in ['title', 'description']:
-#                 setup_item = SetupItem(setup_id=setup.id, item_id=item_id)
-#                 db.session.add(setup_item)
-#         db.session.commit()
-
-#         return jsonify({"message": "Setup added successfully", "success": True}), 201
-#     else:
-#         return jsonify({"message": "user not logged in", "success": False}), 401
-
-# if __name__ == '__main__':
-#     app.run(port=5555, debug=True)
-
-
-
