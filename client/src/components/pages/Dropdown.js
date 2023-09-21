@@ -20,12 +20,20 @@ function SlotDropdown({ slot, onItemSelect, defaultItem }) {
         onItemSelect(slot, selectedItem);
     };
     
+    const evalDefaultItem = () => {
+        if (defaultItem.constructor.name == "Array"){
+            return defaultItem?.length>1?defaultItem[1]:defaultItem[0]
+        }
+        else {
+            return defaultItem
+        }
+    }
     // console.log(`Slot: ${slot}, Selected Item: ${selectedItem}`);
-    if (!defaultItem) return (<h1>loading…</h1>)
+    // if (!defaultItem) return (<h1>loading…</h1>)
 
 
     return (
-        <select style={dropdownStyle} value={defaultItem?.length>1?defaultItem[1]:defaultItem[0]} onChange={handleChange}>
+        <select style={dropdownStyle} value={evalDefaultItem()} onChange={handleChange}>
             <option value="">None</option>
             {items.map(item => (
                 <option key={item.id} value={item.id}>

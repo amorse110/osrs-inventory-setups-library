@@ -81,47 +81,47 @@ function AddSetup() {
       <h1>Title</h1>
       <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
       <label><strong>Head</strong></label>
-      <SlotDropdown slot="head" onItemSelect={(slot, item) => {
+      <SlotDropdown slot="head" defaultItem={selectedItems["head"]} onItemSelect={(slot, item) => {
         setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
       }}/>
       <label><strong>Cape</strong></label>
-      <SlotDropdown slot="cape" onItemSelect={(slot, item) => {
+      <SlotDropdown slot="cape" defaultItem={selectedItems["cape"]} onItemSelect={(slot, item) => {
         setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
       }}/>
       <label><strong>Neck</strong></label>
-      <SlotDropdown slot="neck" onItemSelect={(slot, item) => {
+      <SlotDropdown slot="neck" defaultItem={selectedItems["neck"]} onItemSelect={(slot, item) => {
         setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
       }}/>
       <label><strong>Ammo</strong></label>
-      <SlotDropdown slot="ammo" onItemSelect={(slot, item) => {
+      <SlotDropdown slot="ammo" defaultItem={selectedItems["ammo"]} onItemSelect={(slot, item) => {
         setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
       }}/>
       <label><strong>Weapon</strong></label>
-      <SlotDropdown slot="weapon" onItemSelect={(slot, item) => {
+      <SlotDropdown slot="weapon" defaultItem={selectedItems["weapon"]} onItemSelect={(slot, item) => {
         setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
       }}/>
       <label><strong>Body</strong></label>
-      <SlotDropdown slot="body" onItemSelect={(slot, item) => {
+      <SlotDropdown slot="body" defaultItem={selectedItems["body"]} onItemSelect={(slot, item) => {
         setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
       }}/>
       <label><strong>Shield</strong></label>
-      <SlotDropdown slot="shield" onItemSelect={(slot, item) => {
+      <SlotDropdown slot="shield" defaultItem={selectedItems["shield"]} onItemSelect={(slot, item) => {
         setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
       }}/>
       <label><strong>Legs</strong></label>
-      <SlotDropdown slot="legs" onItemSelect={(slot, item) => {
+      <SlotDropdown slot="legs" defaultItem={selectedItems["legs"]} onItemSelect={(slot, item) => {
         setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
       }}/>
       <label><strong>Hands</strong></label>
-      <SlotDropdown slot="hands" onItemSelect={(slot, item) => {
+      <SlotDropdown slot="hands" defaultItem={selectedItems["hands"]} onItemSelect={(slot, item) => {
         setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
       }}/>
       <label><strong>Feet</strong></label>
-      <SlotDropdown slot="feet" onItemSelect={(slot, item) => {
+      <SlotDropdown slot="feet" defaultItem={selectedItems["feet"]} onItemSelect={(slot, item) => {
         setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
       }}/>
       <label><strong>Ring</strong></label>
-      <SlotDropdown slot="ring" onItemSelect={(slot, item) => {
+      <SlotDropdown slot="ring" defaultItem={selectedItems["ring"]} onItemSelect={(slot, item) => {
         setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
       }}/>
       <label><strong>Description</strong></label>

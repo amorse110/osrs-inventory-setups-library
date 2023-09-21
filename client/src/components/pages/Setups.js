@@ -121,7 +121,7 @@ return (        ///////////////    ADDED ENTIRE RETURN
                           {/* This will render dropdowns for every slot, pre-filled with the current setup's item. */}
                           {Object.entries(updatedItems).map(slot => (
                               <div key={slot[0]}>
-                                  <label><strong>{slot[0].charAt(0).toUpperCase() + slot[0].slice(0)}</strong></label>
+                                  <label><strong>{slot[0].charAt(0).toUpperCase() + slot[0].slice(1)}</strong></label>
                                   <SlotDropdown
                                       slot={slot[0]}
                                       onItemSelect={(slot, item) => {
@@ -152,8 +152,8 @@ return (        ///////////////    ADDED ENTIRE RETURN
                           </div>
                       </div>
                       <div className="setup-items">
-                          {setup?.setup_items?.map(item => (
-                              <div key={item.item.id + item.item.name + setup.id} className="item-card" style={{ gridArea: item.item.slot.toLowerCase() }}>
+                          {setup?.setup_items?.map((item, index) => (
+                              <div key={item.item.id + item.item.name + setup.id + index} className="item-card" style={{ gridArea: item.item.slot.toLowerCase() }}>
                                   <img src={item.item.image} alt={item.item.name} />
                                   <p>{item.item.name}</p>
                               </div>
