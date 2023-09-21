@@ -17,9 +17,9 @@ function SlotDropdown({ slot, onItemSelect, selectedItem, setupItems, setSetupIt
     };
 
     // console.log(`Slot: ${slot}, Selected Item: ${selectedItem}`);
-    
+    //22<select style={dropdownStyle} onChange={handleChange} value={setupItems[slot].id || ''}>
     return (
-        <select style={dropdownStyle} onChange={handleChange} value={setupItems[slot].id || ''}>
+        <select style={dropdownStyle} onChange={handleChange} value={setupItems[slot]?.id || selectedItem || ''}>
             <option value="">None</option>
             {items.map(item => (
                 <option key={item.id} value={item.id}>

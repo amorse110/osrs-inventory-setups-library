@@ -63,7 +63,7 @@ function AddSetup() {
       <h1>Title</h1>
       <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
       <label><strong>Head</strong></label>
-      <SlotDropdown slot="head" selectedItem="" onItemSelect={(slot, item) => {
+      <SlotDropdown slot="head" setupItems="" onItemSelect={(slot, item) => {
         setSelectedItems(prevItems => ({ ...prevItems, [slot]: item}))
       }}/>
       <label><strong>Cape</strong></label>

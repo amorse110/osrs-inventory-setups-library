@@ -176,46 +176,36 @@ class GetSetupResource(Resource):
 api.add_resource(GetSetupResource, '/get-setup/<int:setup_id>')
 
 class EditSetupResource(Resource):
-    def patch(self, setup_id):
-        # Ensure user is logged in
-        if 'user_id' not in session:
-            return {"message": "User not logged in", "success": False}, 401
+    # def patch(self, setup_id):
+    #     if 'user_id' not in session:
+    #         return {"message": "User not logged in", "success": False}, 401
 
-        # Fetch the setup to be edited
-        setup = Setup.query.filter_by(id=setup_id).first()
+    #     setup = Setup.query.filter_by(id=setup_id).first()
 
-        # If setup doesn't exist or doesn't belong to the logged in user
-        if not setup or setup.user_id != session['user_id']:
-            return {"message": "Setup not found or unauthorized", "success": False}, 404
+    #     if not setup or setup.user_id != session['user_id']:
+    #         return {"message": "Setup not found or unauthorized", "success": False}, 404
 
-        # Get the updated data from the request
-        data = request.json
+    #     data = request.json
 
-        # Update the title and description
-        setup.title = data['title']
-        setup.description = data['description']
+    #     setup.title = data['title']
+    #     setup.description = data['description']
 
-        # Update the associated items
-        for slot, item_id in data.items():
-            if slot not in ['title', 'description']:
-                # Fetch the SetupItem for this slot
-                setup_item = SetupItem.query.filter_by(setup_id=setup.id, slot=slot).first()
-                if setup_item:
-                    # If it exists, update the item_id
-                    setup_item.item_id = item_id
-                else:
-                    # If there wasn't an item for this slot before, create a new one
-                    new_setup_item = SetupItem(setup_id=setup.id, item_id=item_id, slot=slot)
-                    db.session.add(new_setup_item)
+    #     for slot, item_id in data.items():
+    #         if slot not in ['title', 'description']:
+    #             setup_item = SetupItem.query.filter_by(setup_id=setup.id, slot=slot).first()
+    #             if setup_item:
+    #                 setup_item.item_id = item_id
+    #             else:
+    #                 new_setup_item = SetupItem(setup_id=setup.id, item_id=item_id, slot=slot)
+    #                 db.session.add(new_setup_item)
 
-        try:
-            # Commit the changes
-            db.session.commit()
-            return {"message": "Setup edited successfully", "success": True}, 200
+    #     try:
+    #         db.session.commit()
+    #         return {"message": "Setup edited successfully", "success": True}, 200
 
-        except Exception as e:
-            db.session.rollback()
-            return {"message": str(e), "success": False}, 500
+    #     except Exception as e:
+    #         db.session.rollback()
+    #         return {"message": str(e), "success": False}, 500
         
     def get(self, setup_id):
         setup = Setup.query.filter_by(id=setup_id).first()
@@ -229,6 +219,10 @@ api.add_resource(EditSetupResource, '/edit-setup/<int:setup_id>')
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
+
+
+
+
 
 
 
