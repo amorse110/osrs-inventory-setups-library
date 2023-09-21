@@ -15,10 +15,7 @@ function Setups() {
     });
 
   useEffect(() => {
-    fetch('/user-setups')
-      .then(res => res.json())
-      .then(data => setSetups(data))
-      .catch(error => console.error('Error fetching setups:', error));
+    getSetups()
   }, []);
 
   function handleDelete(setupId) {
@@ -45,6 +42,11 @@ const handleEditSetup = (setupId) => {              //////////  ADDED ENTIRE THI
   setUpdatedTitle(setupToEdit.title);
   setUpdatedDescription(setupToEdit.description);
   setEditingSetupId(setupId);
+  let updatedItems = {}
+  setupToEdit.setup_items.forEach(si => (
+    updatedItems[si.item.slot]=[si.item.id]
+  ))
+  setUpdatedItems(updatedItems)
 };
 
 const handleConfirmEdit = () => {           /////////    ADDED ENTIRE THING
@@ -56,7 +58,7 @@ const handleConfirmEdit = () => {           /////////    ADDED ENTIRE THING
     body: JSON.stringify({
         title: updatedTitle,
         description: updatedDescription,
-        setup_items: Object.entries(updatedItems).map(([slot, item]) => ({ slot, item: item.id }))
+        setup_items: Object.entries(updatedItems)
     })
   })
   .then(response => {
@@ -87,18 +89,27 @@ const handleConfirmEdit = () => {           /////////    ADDED ENTIRE THING
       setUpdatedItems({
           head: "", cape: "", neck: "", ammo: "", weapon: "", body: "", shield: "", legs: "", hands: "", feet: "", ring: ""
       });
+      getSetups()
   })
   .catch(error => {
       console.error('Error updating setup:', error);
       alert('Error updating setup. Please try again.');
   });
 };
+console.log('Setups Data:', setups);
 
+  function getSetups() {
+    fetch('/user-setups')
+      .then(res => res.json())
+      .then(data => setSetups(data))
+      .catch(error => console.error('Error fetching setups:', error));
+  }
+  
 
 return (        ///////////////    ADDED ENTIRE RETURN
   <div className='setups-container'>
-      {setups.map((setup, index) => (
-          <div key={index} className="setup-card">
+      {setups.map((setup) => (
+          <div key={setup.id} className="setup-card">
               {editingSetupId === setup.id ? (
                   <>
                       <input
@@ -108,15 +119,16 @@ return (        ///////////////    ADDED ENTIRE RETURN
                       />
                       <div className="setup-items">
                           {/* This will render dropdowns for every slot, pre-filled with the current setup's item. */}
-                          {Object.keys(updatedItems).map(slot => (
-                              <div key={slot}>
-                                  <label><strong>{slot.charAt(0).toUpperCase() + slot.slice(1)}</strong></label>
+                          {Object.entries(updatedItems).map(slot => (
+                              <div key={slot[0]}>
+                                  <label><strong>{slot[0].charAt(0).toUpperCase() + slot[0].slice(0)}</strong></label>
                                   <SlotDropdown
-                                      slot={slot}
+                                      slot={slot[0]}
                                       onItemSelect={(slot, item) => {
-                                          setUpdatedItems(prevItems => ({ ...prevItems, [slot]: item }));
+                                          setUpdatedItems(prevItems => ({ ...prevItems, [slot]: [prevItems[slot][0], item] }));
                                       }}
-                                      defaultItem={setup?.setup_items?.find(item => item.slot && item.slot.toLowerCase() === slot)?.item}
+                                      defaultItem={slot[1]}
+                                      // defaultItem={setup?.setup_items?.find(item => item.slot && item.slot.toLowerCase() === slot)?.item}
                                   />
                               </div>
                           ))}
@@ -141,7 +153,7 @@ return (        ///////////////    ADDED ENTIRE RETURN
                       </div>
                       <div className="setup-items">
                           {setup?.setup_items?.map(item => (
-                              <div key={item.item.id} className="item-card" style={{ gridArea: item.item.slot.toLowerCase() }}>
+                              <div key={item.item.id + item.item.name + setup.id} className="item-card" style={{ gridArea: item.item.slot.toLowerCase() }}>
                                   <img src={item.item.image} alt={item.item.name} />
                                   <p>{item.item.name}</p>
                               </div>

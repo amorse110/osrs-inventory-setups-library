@@ -191,11 +191,11 @@ class EditSetupResource(Resource):
         setup.title = data.get('title', setup.title)
         setup.description = data.get('description', setup.description)
         for setup_item_data in data.get('setup_items', []):
-            item_id = setup_item_data.get('item')
+            item_id = setup_item_data[1][0]
             if item_id:
                 setup_item = SetupItem.query.filter_by(setup_id=setup.id, item_id=item_id).first()
-                if setup_item:
-                    setup_item.item_id = item_id
+                if setup_item and len(setup_item_data[1]) > 1:
+                    setup_item.item_id = setup_item_data[1][1]
                 else:
                     # Handle the case where a SetupItem for the given slot does not exist
                     new_setup_item = SetupItem(setup_id=setup.id, item_id=item_id)

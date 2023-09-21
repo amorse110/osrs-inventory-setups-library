@@ -113,3 +113,8 @@ button {
     font-size: 1.5rem;
     color: black;
   }
+
+  .success-message {
+    font-size: 2em;
+    color: green;
+  }

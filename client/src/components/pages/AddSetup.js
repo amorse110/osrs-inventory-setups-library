@@ -6,6 +6,7 @@ function AddSetup() {
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [errorMessage, setErrorMessage] = useState("")
+  const [successMessage, setSuccessMessage] = useState("");///NEW
 
   const [selectedItems, setSelectedItems] = useState({
     head: "",
@@ -47,6 +48,22 @@ function AddSetup() {
     .then(data => {
       console.log(data);
       setErrorMessage("")
+      setSuccessMessage("Setup added successfully")
+      setTitle('');
+      setDescription("");
+      setSelectedItems({
+        head: "",
+        cape: "",
+        neck: "",
+        ammo: "",
+        weapon: "",
+        body: "",
+        shield: "",
+        legs: "",
+        hands: "",
+        feet: "",
+        ring: ""
+      });
     })
     .catch(error => {
       if (error.message === 'User not logged in') {
@@ -60,6 +77,7 @@ function AddSetup() {
   return (
     <form className="center-container" onSubmit={handleSubmit}>
       {errorMessage && <p className="error-message">{errorMessage}</p>}
+      
       <h1>Title</h1>
       <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
       <label><strong>Head</strong></label>
@@ -113,6 +131,7 @@ function AddSetup() {
           value={description} onChange={(e) => setDescription(e.target.value)}
       />
       <button type="submit">Add Setup</button>
+      {successMessage && <p className="success-message"><strong>{successMessage}</strong></p>}
     </form>
   );
 }
