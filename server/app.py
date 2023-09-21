@@ -176,7 +176,7 @@ class GetSetupResource(Resource):
 api.add_resource(GetSetupResource, '/get-setup/<int:setup_id>')
 
 class EditSetupResource(Resource):
-    def put(self, setup_id):
+    def patch(self, setup_id):
         # Ensure user is logged in
         if 'user_id' not in session:
             return {"message": "User not logged in", "success": False}, 401
@@ -216,6 +216,14 @@ class EditSetupResource(Resource):
         except Exception as e:
             db.session.rollback()
             return {"message": str(e), "success": False}, 500
+        
+    def get(self, setup_id):
+        setup = Setup.query.filter_by(id=setup_id).first()
+
+        if not setup:
+            return {"message": "setup not found"}, 404
+        else:
+            return setup.to_dict(), 200 
 
 api.add_resource(EditSetupResource, '/edit-setup/<int:setup_id>')
 

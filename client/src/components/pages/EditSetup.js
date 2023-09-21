@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import './styles.css';
 import SlotDropdown from './Dropdown';
 
 function EditSetupForm({ currentSetup }) {
-    const location = useLocation();
+    const {setupId} = useParams();
 
-    const initialSetup = location.state?.setup || currentSetup || {};
+    // const initialSetup = location.state?.setup || currentSetup || {};
 
-    const [title, setTitle] = useState(initialSetup.title || "");
-    const [description, setDescription] = useState(initialSetup.description || "");
-    const defaultItems = {
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [setupItems, setSetupItems] = useState({
         head: null,
         cape: null,
         neck: null,
@@ -22,18 +22,39 @@ function EditSetupForm({ currentSetup }) {
         hands: null,
         feet: null,
         ring: null,
-    };
-    const [selectedItems, setSelectedItems] = useState({ ...defaultItems, ...initialSetup.items });
+    });
+    // const [selectedItems, setSelectedItems] = useState({ ...defaultItems, ...initialSetup.items });
 
-    if (!initialSetup.id) return <div>Loading setup...</div>;
-
-    function handleEditSubmit(event) {
+    
+    useEffect(() => {
+        fetch(`/edit-setup/${setupId}`)
+        .then(res => res.json())
+        .then(setup => {
+            setTitle(setup.title)
+            setDescription(setup.description)
+            setSetupItems({
+                head: setup.setup_items.find(si => si.item.slot == 'head')?.item,
+                cape: setup.setup_items.find(si => si.item.slot == 'cape')?.item,
+                neck: setup.setup_items.find(si => si.item.slot == 'neck')?.item,
+                ammo: setup.setup_items.find(si => si.item.slot == 'ammo')?.item,
+                weapon: setup.setup_items.find(si => si.item.slot == 'weapon')?.item,
+                body: setup.setup_items.find(si => si.item.slot == 'body')?.item,
+                shield: setup.setup_items.find(si => si.item.slot == 'shield')?.item,
+                legs: setup.setup_items.find(si => si.item.slot == 'legs')?.item,
+                hands: setup.setup_items.find(si => si.item.slot == 'hands')?.item,
+                feet: setup.setup_items.find(si => si.item.slot == 'feet')?.item,
+                ring: setup.setup_items.find(si => si.item.slot == 'ring')?.item,
+                })
+            })
+        }, [setupId])
+        
+        function handleEditSubmit(event) {
         event.preventDefault();
-
+        
         const setupData = {
             title,
             description,
-            ...selectedItems
+            // ...selectedItems
         };
         
         if (currentSetup && currentSetup.id) {
@@ -56,7 +77,7 @@ function EditSetupForm({ currentSetup }) {
         }
     }
 
-    console.log("Selected Items:", selectedItems);
+    if (!title) return <div>Loading setup...</div>;
 
     return (
         <form className="center-container" onSubmit={handleEditSubmit}>
@@ -67,11 +88,12 @@ function EditSetupForm({ currentSetup }) {
                 <React.Fragment key={slot}>
                     <label><strong>{slot.charAt(0).toUpperCase() + slot.slice(1)}:</strong></label>
                     <SlotDropdown 
-                        slot={slot} 
-                        selectedItem={selectedItems[slot]} 
-                        onItemSelect={(slot, item) => {
-                            setSelectedItems(prevItems => ({ ...prevItems, [slot]: item }));
-                        }}
+                        slot={slot}
+                        setupItems={setupItems}
+                        setSetupItems={setSetupItems} 
+                        // onItemSelect={(slot, item) => {
+                        //     setSelectedItems(prevItems => ({ ...prevItems, [slot]: item }));
+                        // }}
                     />
                 </React.Fragment>    
             ))}
